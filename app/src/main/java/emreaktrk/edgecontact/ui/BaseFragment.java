@@ -8,8 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import emreaktrk.edgecontact.logger.Logger;
+
 
 public abstract class BaseFragment extends Fragment {
+
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Logger.v(getTag() + " created");
+    }
 
     @LayoutRes protected abstract int getLayoutResId();
 
