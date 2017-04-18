@@ -1,4 +1,4 @@
-package emreaktrk.edgecontact.sharedprefs;
+package emreaktrk.edgecontact.agent.prefs;
 
 
 import android.content.Context;

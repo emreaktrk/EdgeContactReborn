@@ -16,7 +16,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onAttachedToWindow();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,18 +23,24 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutResId());
 
-        Logger.v(getTag() + " created");
+        Logger.v(getName() + " created");
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @LayoutRes protected abstract int getLayoutResId();
 
-    protected String getTag() {
+    protected String getName() {
         return getClass().getSimpleName();
-    }
-
-    @Override public void onBackPressed() {
-        super.onBackPressed();
-
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }

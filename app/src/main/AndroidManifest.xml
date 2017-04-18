@@ -16,6 +16,7 @@
 
         <activity
             android:name=".ui.edge.EdgeActivity"
+            android:excludeFromRecents="true"
             android:theme="@style/AppTheme.MaterialTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

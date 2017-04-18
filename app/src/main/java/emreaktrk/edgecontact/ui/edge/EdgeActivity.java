@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -16,6 +17,7 @@ import emreaktrk.edgecontact.ui.BaseActivity;
 public final class EdgeActivity extends BaseActivity {
 
     private SimpleDraweeView mWallpaperView;
+    private ViewPager mPager;
 
     @Override protected int getLayoutResId() {
         return R.layout.layout_launch;
@@ -25,17 +27,18 @@ public final class EdgeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         loadWallpaper();
+        loadEdges();
     }
-
 
     @Override public void onContentChanged() {
         super.onContentChanged();
 
         mWallpaperView = (SimpleDraweeView) findViewById(R.id.edge_wallpaper);
+        mPager = (ViewPager) findViewById(R.id.edge_pager);
     }
 
-    @WorkerThread
-    @SuppressWarnings("deprecation") private void loadWallpaper() {
+    @SuppressWarnings("deprecation")
+    @WorkerThread private void loadWallpaper() {
         Drawable wallpaper = WallpaperManager
                 .getInstance(this)
                 .getFastDrawable();
@@ -46,6 +49,17 @@ public final class EdgeActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 mWallpaperView.setImageDrawable(background);
+            }
+        });
+    }
+
+    @WorkerThread
+    private void loadEdges() {
+        final EdgeAdapter adapter = new EdgeAdapter(getSupportFragmentManager());
+
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                mPager.setAdapter(adapter);
             }
         });
     }

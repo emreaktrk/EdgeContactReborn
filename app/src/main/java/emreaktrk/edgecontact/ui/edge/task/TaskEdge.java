@@ -1,14 +1,15 @@
-package emreaktrk.edgecontact.ui.edge.pages;
+package emreaktrk.edgecontact.ui.edge.task;
 
 
 import android.view.View;
 
+import emreaktrk.edgecontact.R;
 import emreaktrk.edgecontact.ui.edge.Edge;
 
-public final class ShortcutEdge extends Edge {
+public final class TaskEdge extends Edge {
 
     @Override protected int getLayoutResId() {
-        return 0;
+        return R.layout.cell_task;
     }
 
     @Override protected void onViewInflated(View view) {
