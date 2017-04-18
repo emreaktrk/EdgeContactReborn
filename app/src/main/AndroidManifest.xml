@@ -15,7 +15,8 @@
         tools:replace="android:allowBackup">
 
         <activity
-            android:name=".ui.launch.LaunchActivity">
+            android:name=".ui.edge.EdgeActivity"
+            android:theme="@style/AppTheme.MaterialTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -23,8 +24,8 @@
         </activity>
 
         <activity
-            android:name=".ui.tutorial.TutorialActivity"/>
-
+            android:name=".ui.tutorial.TutorialActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 </manifest>

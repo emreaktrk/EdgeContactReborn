@@ -11,7 +11,7 @@ final class TutorialFactory extends PagerFactory<Tutorial> {
         return new FirstTutorial();
     }
 
-    int getCount() {
+    @Override public int getCount() {
         return COUNT;
     }
 }
