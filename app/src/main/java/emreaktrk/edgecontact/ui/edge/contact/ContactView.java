@@ -3,22 +3,15 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.view.SimpleDraweeView;
-
-public final class ContactView extends SimpleDraweeView implements View.OnClickListener {
+public final class ContactView extends FloatingActionButton implements View.OnClickListener {
 
     private OnClickListener mListener;
     private Contact mContact;
 
-    public ContactView(Context context, GenericDraweeHierarchy hierarchy) {
-        super(context, hierarchy);
-
-        init();
-    }
 
     public ContactView(Context context) {
         super(context);
@@ -34,12 +27,6 @@ public final class ContactView extends SimpleDraweeView implements View.OnClickL
 
     public ContactView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        init();
-    }
-
-    public ContactView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
 
         init();
     }

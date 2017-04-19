@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import emreaktrk.edgecontact.R;
+import emreaktrk.edgecontact.logger.Logger;
 import emreaktrk.edgecontact.ui.edge.Edge;
+import io.realm.Realm;
 
 public final class ContactEdge extends Edge implements ContactView.OnClickListener {
 
@@ -22,7 +24,7 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
     }
 
     @Override protected void onViewInflated(View view) {
-        mFirstView = (ContactView) view.findViewById(R.id.contract_first);
+        mFirstView = (ContactView) view.findViewById(R.id.contact_first);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -40,9 +42,9 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
     }
 
     @Override public void onAddClicked(View view) {
-        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        startActivityForResult(pickContactIntent, REQUEST_CODE);
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -56,12 +58,24 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
             return;
         }
 
-        Contact contact = ContractResolver
+        final Contact contact = ContractResolver
                 .from(getContext())
                 .setUri(data.getData())
-                .setPosition(0)
+                .setId(0)
                 .query();
 
-        // TODO Save to realm
+        if (contact == null) {
+            return;
+        }
+
+        Realm
+                .getDefaultInstance()
+                .executeTransaction(
+                        new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                realm.copyToRealmOrUpdate(contact);
+                                Logger.json(contact);
+                            }
+                        });
     }
 }

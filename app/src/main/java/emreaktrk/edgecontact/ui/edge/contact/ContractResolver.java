@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.WorkerThread;
-import android.text.TextUtils;
 
 final class ContractResolver {
 
@@ -20,7 +19,7 @@ final class ContractResolver {
 
     private Context mContext;
     private Uri mUri;
-    private int mPosition;
+    private int mId;
 
     public static ContractResolver from(Context context) {
         ContractResolver builder = new ContractResolver();
@@ -34,8 +33,8 @@ final class ContractResolver {
         return this;
     }
 
-    ContractResolver setPosition(int position) {
-        this.mPosition = position;
+    ContractResolver setId(int id) {
+        this.mId = id;
 
         return this;
     }
@@ -68,7 +67,7 @@ final class ContractResolver {
         contact.mPhone = new Phone(data);
 
         String uri = cursor.getString(POSITION_PHOTO_URI);
-        contact.mPhoto = TextUtils.isEmpty(uri) ? null : Uri.parse(uri);
+        contact.mPhoto = uri;
 
         if (!cursor.isClosed()) {
             cursor.close();

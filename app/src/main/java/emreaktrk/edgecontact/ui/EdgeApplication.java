@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import io.realm.Realm;
+
 
 public final class EdgeApplication extends Application {
 
@@ -11,5 +13,6 @@ public final class EdgeApplication extends Application {
         super.onCreate();
 
         Fresco.initialize(this);
+        Realm.init(this);
     }
 }

@@ -23,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutResId());
 
-        Logger.v(getName() + " created");
+        Logger.d(getName() + " created");
     }
 
     @Override protected void onResume() {

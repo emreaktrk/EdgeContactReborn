@@ -3,14 +3,29 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.net.Uri;
 
-class Contact implements IContact {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Contact extends RealmObject implements IContact {
+
+    @PrimaryKey long mId;
     Phone mPhone;
     String mName;
-    Uri mPhoto;
-    int position;
+    String mPhoto;
+
+    @SuppressWarnings("WeakerAccess") public Contact() {
+    }
 
     Uri uri() {
-        return Uri.parse("tel:" + mPhone.toString());
+        return Uri.parse("tel:" + mPhone);
+    }
+
+    @Override public String toString() {
+        return "{" +
+                "id=" + mId +
+                ", phone=" + mPhone.toString() +
+                ", name='" + mName + '\'' +
+                ", photo='" + mPhoto + '\'' +
+                '}';
     }
 }

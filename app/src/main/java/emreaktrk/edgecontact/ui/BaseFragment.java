@@ -16,7 +16,7 @@ public abstract class BaseFragment extends Fragment {
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Logger.v(getName() + " created");
+        Logger.d(getName() + " created");
     }
 
     @LayoutRes protected abstract int getLayoutResId();
