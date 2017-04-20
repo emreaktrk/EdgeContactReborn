@@ -1,13 +1,26 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.WorkerThread;
 import android.util.AttributeSet;
 import android.view.View;
 
-public final class ContactView extends FloatingActionButton implements View.OnClickListener {
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.facebook.drawee.drawable.RoundedBitmapDrawable;
+import com.scalified.fab.ActionButton;
+
+import java.io.IOException;
+
+import emreaktrk.edgecontact.logger.Logger;
+
+public final class ContactView extends ActionButton implements View.OnClickListener {
 
     private OnClickListener mListener;
     private Contact mContact;
@@ -44,28 +57,69 @@ public final class ContactView extends FloatingActionButton implements View.OnCl
             return;
         }
 
-        if (mContact == null) {
-            mListener.onAddClicked(this);
-        } else {
+        if (hasContact()) {
             mListener.onCallClicked(mContact, this);
+        } else {
+            mListener.onAddClicked(this);
         }
     }
 
     public void setContact(@Nullable Contact contact) {
-        if (contact == null) {
-            clear();
+        mContact = contact;
+        update();
+    }
+
+    private void update() {
+        if (hasContact()) {
+            apply();
             return;
         }
 
-        apply();
+        clear();
     }
 
+    public boolean hasContact() {
+        return mContact != null;
+    }
+
+    private RoundedBitmapDrawable getRoundedPhoto() {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mContact.photo());
+            RoundedBitmapDrawable rounded = new RoundedBitmapDrawable(getResources(), bitmap);
+            rounded.setCircle(true);
+
+            return rounded;
+        } catch (IOException e) {
+            Logger.e("Photo Uri is invalid.");
+        }
+
+        return null;
+    }
+
+    @WorkerThread
     private void clear() {
         // TODO Clear state
     }
 
-    private void apply() {
-        // TODO Apply contact
+    @SuppressLint("WrongThread")
+    @WorkerThread private void apply() {
+        final Drawable drawable = mContact.hasPhoto() ?
+                getRoundedPhoto()
+                :
+                TextDrawable
+                        .builder()
+                        .beginConfig()
+                        .textColor(Color.BLACK)
+                        .bold()
+                        .endConfig()
+                        .buildRound(mContact.letter(), Color.TRANSPARENT);
+
+        post(new Runnable() {
+            @Override public void run() {
+                setImageSize(48);
+                setImageDrawable(drawable);
+            }
+        });
     }
 
     public interface OnClickListener {

@@ -10,57 +10,61 @@
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
         android:id="@+id/contact_first"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
-        app:rippleColor="@android:color/darker_gray"/>
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="@dimen/default_space"/>
+        app:button_color="@color/fab_material_white"
+        app:button_colorPressed="@color/fab_material_white"
+        app:button_colorRipple="#DDDDDD"
+        app:image="@drawable/ic_add"
+        app:rippleEffect_enabled="true"
+        app:size="@dimen/icon_size"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
-        android:id="@+id/contact_second"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
-        app:rippleColor="@android:color/darker_gray"/>
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="@dimen/default_space"/>
+        app:button_color="@android:color/white"
+        app:button_colorPressed="@color/fab_material_white"
+        app:button_colorRipple="#DDDDDD"
+        app:image="@drawable/ic_add"
+        app:rippleEffect_enabled="true"
+        app:shadowResponsiveEffect_enabled="true"
+        app:size="@dimen/icon_size"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
-        android:id="@+id/contact_third"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
-        app:rippleColor="@android:color/darker_gray"/>
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="@dimen/default_space"/>
+        app:button_color="@android:color/white"
+        app:button_colorPressed="@color/fab_material_white"
+        app:button_colorRipple="#DDDDDD"
+        app:image="@drawable/ic_add"
+        app:rippleEffect_enabled="true"
+        app:shadowResponsiveEffect_enabled="true"
+        app:size="@dimen/icon_size"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
-        android:id="@+id/contact_fourth"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
-        app:rippleColor="@android:color/darker_gray"/>
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="@dimen/default_space"/>
+        app:button_color="@android:color/white"
+        app:button_colorPressed="@color/fab_material_white"
+        app:button_colorRipple="#DDDDDD"
+        app:image="@drawable/ic_add"
+        app:rippleEffect_enabled="true"
+        app:shadowResponsiveEffect_enabled="true"
+        app:size="@dimen/icon_size"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
-        android:id="@+id/contact_fifth"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
-        app:rippleColor="@android:color/darker_gray"/>
+        app:button_color="@android:color/white"
+        app:button_colorPressed="@color/fab_material_white"
+        app:button_colorRipple="#DDDDDD"
+        app:image="@drawable/ic_add"
+        app:rippleEffect_enabled="true"
+        app:shadowResponsiveEffect_enabled="true"
+        app:size="@dimen/icon_size"/>
 </LinearLayout>

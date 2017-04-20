@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="emreaktrk.edgecontact">
 
+    <uses-permission
+        android:name="android.permission.CALL_PHONE"/>
+
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS"/>
+
     <application
         android:name=".ui.EdgeApplication"
         android:allowBackup="false"

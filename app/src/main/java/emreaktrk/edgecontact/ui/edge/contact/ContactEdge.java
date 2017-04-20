@@ -2,6 +2,7 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 
 import emreaktrk.edgecontact.R;
 import emreaktrk.edgecontact.logger.Logger;
+import emreaktrk.edgecontact.permission.PermissionHelper;
 import emreaktrk.edgecontact.ui.edge.Edge;
 import io.realm.Realm;
 
@@ -31,14 +33,28 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         mFirstView.setOnClickListener(this);
+
+        PermissionHelper.contact(getActivity(), new PermissionHelper.Callback() {
+            @Override public void onRationale() {
+
+            }
+
+            @Override public void onGranted() {
+
+            }
+        });
     }
 
-    @Override public void onCallClicked(Contact contact, View view) {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(contact.uri());
-        startActivity(intent);
+    @Override public void onCallClicked(final Contact contact, View view) {
+        PermissionHelper.call(getActivity(), new PermissionHelper.Callback() {
+            @Override public void onRationale() {
+                // TODO Show information dialog
+            }
 
-        getActivity().finish();
+            @Override public void onGranted() {
+                call(contact.uri());
+            }
+        });
     }
 
     @Override public void onAddClicked(View view) {
@@ -74,8 +90,18 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
                         new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
+                                mFirstView.setContact(contact);
+
                                 Logger.json(contact);
                             }
                         });
+    }
+
+    private void call(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(uri);
+        startActivity(intent);
+
+        getActivity().finish();
     }
 }
