@@ -116,7 +116,7 @@ public final class ContactView extends ActionButton implements View.OnClickListe
 
         post(new Runnable() {
             @Override public void run() {
-                setImageSize(48);
+                setImageSize(64);
                 setImageDrawable(drawable);
             }
         });

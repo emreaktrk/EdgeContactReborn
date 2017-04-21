@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="end|center_vertical"
@@ -10,61 +9,32 @@
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
         android:id="@+id/contact_first"
+        style="@style/Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:button_color="@color/fab_material_white"
-        app:button_colorPressed="@color/fab_material_white"
-        app:button_colorRipple="#DDDDDD"
-        app:image="@drawable/ic_add"
-        app:rippleEffect_enabled="true"
-        app:size="@dimen/icon_size"/>
+        android:layout_gravity="bottom|end"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
+        style="@style/Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:button_color="@android:color/white"
-        app:button_colorPressed="@color/fab_material_white"
-        app:button_colorRipple="#DDDDDD"
-        app:image="@drawable/ic_add"
-        app:rippleEffect_enabled="true"
-        app:shadowResponsiveEffect_enabled="true"
-        app:size="@dimen/icon_size"/>
+        android:layout_gravity="bottom|end"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
+        style="@style/Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:button_color="@android:color/white"
-        app:button_colorPressed="@color/fab_material_white"
-        app:button_colorRipple="#DDDDDD"
-        app:image="@drawable/ic_add"
-        app:rippleEffect_enabled="true"
-        app:shadowResponsiveEffect_enabled="true"
-        app:size="@dimen/icon_size"/>
+        android:layout_gravity="bottom|end"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
+        style="@style/Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:button_color="@android:color/white"
-        app:button_colorPressed="@color/fab_material_white"
-        app:button_colorRipple="#DDDDDD"
-        app:image="@drawable/ic_add"
-        app:rippleEffect_enabled="true"
-        app:shadowResponsiveEffect_enabled="true"
-        app:size="@dimen/icon_size"/>
+        android:layout_gravity="bottom|end"/>
 
     <emreaktrk.edgecontact.ui.edge.contact.ContactView
+        style="@style/Contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:button_color="@android:color/white"
-        app:button_colorPressed="@color/fab_material_white"
-        app:button_colorRipple="#DDDDDD"
-        app:image="@drawable/ic_add"
-        app:rippleEffect_enabled="true"
-        app:shadowResponsiveEffect_enabled="true"
-        app:size="@dimen/icon_size"/>
+        android:layout_gravity="bottom|end"/>
 </LinearLayout>
