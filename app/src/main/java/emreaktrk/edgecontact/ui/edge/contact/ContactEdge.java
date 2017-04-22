@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import emreaktrk.edgecontact.R;
@@ -14,29 +15,33 @@ import emreaktrk.edgecontact.logger.Logger;
 import emreaktrk.edgecontact.permission.PermissionHelper;
 import emreaktrk.edgecontact.ui.edge.Edge;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
-public final class ContactEdge extends Edge implements ContactView.OnClickListener {
+public final class ContactEdge extends Edge implements ContactAdapter.IDelegate {
 
     private static final int REQUEST_CODE = 568;
 
-    private ContactView mFirstView;
+    private RecyclerView mRecyclerView;
+    private ContactAdapter mAdapter;
 
     @Override protected int getLayoutResId() {
         return R.layout.cell_contact;
     }
 
     @Override protected void onViewInflated(View view) {
-        mFirstView = (ContactView) view.findViewById(R.id.contact_first);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.contact_recycler);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mFirstView.setOnClickListener(this);
+
+        mAdapter = new ContactAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         PermissionHelper.contact(getActivity(), new PermissionHelper.Callback() {
             @Override public void onRationale() {
-
+                // TODO Show information dialog
             }
 
             @Override public void onGranted() {
@@ -45,7 +50,7 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
         });
     }
 
-    @Override public void onCallClicked(final Contact contact, View view) {
+    @Override public void onCallClicked(final Contact contact) {
         PermissionHelper.call(getActivity(), new PermissionHelper.Callback() {
             @Override public void onRationale() {
                 // TODO Show information dialog
@@ -55,9 +60,10 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
                 call(contact.uri());
             }
         });
+
     }
 
-    @Override public void onAddClicked(View view) {
+    @Override public void onAddClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         startActivityForResult(intent, REQUEST_CODE);
@@ -77,7 +83,7 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
         final Contact contact = ContractResolver
                 .from(getContext())
                 .setUri(data.getData())
-                .setId(0)
+                .setId(mAdapter.getSelectedPosition())
                 .query();
 
         if (contact == null) {
@@ -90,7 +96,7 @@ public final class ContactEdge extends Edge implements ContactView.OnClickListen
                         new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
-                                mFirstView.setContact(contact);
+                                mAdapter.notifyItemChanged();
 
                                 Logger.json(contact);
                             }

@@ -1,5 +1,15 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
 
-public interface IContact {
+import android.net.Uri;
+
+interface IContact {
+
+    boolean hasPhoto();
+
+    Uri photo();
+
+    String letter();
+
+    Uri uri();
 }

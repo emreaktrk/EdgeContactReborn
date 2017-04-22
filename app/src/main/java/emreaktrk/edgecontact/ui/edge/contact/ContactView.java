@@ -15,6 +15,7 @@ import android.view.View;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.facebook.drawee.drawable.RoundedBitmapDrawable;
 import com.scalified.fab.ActionButton;
+import com.scalified.uitools.convert.DensityConverter;
 
 import java.io.IOException;
 
@@ -103,6 +104,8 @@ public final class ContactView extends ActionButton implements View.OnClickListe
 
     @SuppressLint("WrongThread")
     @WorkerThread private void apply() {
+        final float size = DensityConverter.pxToDp(getContext(), getSize());
+
         final Drawable drawable = mContact.hasPhoto() ?
                 getRoundedPhoto()
                 :
@@ -116,7 +119,7 @@ public final class ContactView extends ActionButton implements View.OnClickListe
 
         post(new Runnable() {
             @Override public void run() {
-                setImageSize(64);
+                setImageSize(size);
                 setImageDrawable(drawable);
             }
         });

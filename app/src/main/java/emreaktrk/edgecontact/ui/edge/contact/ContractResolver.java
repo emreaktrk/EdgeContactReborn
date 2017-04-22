@@ -59,6 +59,7 @@ final class ContractResolver {
         }
 
         Contact contact = new Contact();
+        contact.mId = mId;
 
         String name = cursor.getString(POSITION_DISPLAY_NAME);
         contact.mName = name;

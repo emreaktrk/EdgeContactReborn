@@ -7,8 +7,8 @@
         <item name="image">@drawable/ic_add</item>
         <item name="rippleEffect_enabled">true</item>
         <item name="shadowResponsiveEffect_enabled">true</item>
-        <item name="size">@dimen/icon_size</item>
         <item name="stroke_color">@color/fab_material_white</item>
         <item name="stroke_width">3dp</item>
+        <item name="type">DEFAULT</item>
     </style>
 </resources>

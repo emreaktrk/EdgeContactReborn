@@ -46,10 +46,6 @@ class RippleEffectDrawer extends EffectDrawer {
      */
     private static final long POST_INVALIDATION_DELAY_MS = 100;
     /**
-     * Paint for used ripple
-     */
-    private Paint ripplePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    /**
      * Current Ripple Effect radius
      */
     private int currentRadius;
@@ -164,10 +160,11 @@ class RippleEffectDrawer extends EffectDrawer {
      */
     private Paint getPreparedPaint() {
         getActionButton().resetPaint();
-        ripplePaint.setStyle(Paint.Style.FILL);
-        ripplePaint.setColor(getActionButton().getButtonColorRipple());
-        ripplePaint.setAlpha(72);
-        return ripplePaint;
+        Paint paint = getActionButton().getRipplePaint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(getActionButton().getButtonColorRipple());
+        paint.setAlpha(72);
+        return paint;
     }
 
 }

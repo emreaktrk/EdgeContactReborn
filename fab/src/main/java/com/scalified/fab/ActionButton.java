@@ -29,6 +29,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +78,11 @@ public class ActionButton extends View {
      * <b>Action Button</b>
      */
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
+    /**
+     * {@link android.graphics.Paint}, which is used for drawing the elements of
+     * <b>Action Button</b>
+     */
+    private final Paint ripplePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     /**
      * A view invalidator, which is used to invalidate the <b>Action Button</b>
      */
@@ -1329,9 +1334,9 @@ public class ActionButton extends View {
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         TouchPoint point = new TouchPoint(event.getX(), event.getY());
-        boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(),
-                calculateCircleRadius());
+        boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius());
         int action = event.getAction();
+        Log.i("ACTION", "onTouchEvent: " + action + "inside: " + touchPointInsideCircle);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (touchPointInsideCircle) {
@@ -1396,6 +1401,8 @@ public class ActionButton extends View {
     protected final void resetPaint() {
         getPaint().reset();
         getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
+        getRipplePaint().reset();
+        getRipplePaint().setFlags(Paint.ANTI_ALIAS_FLAG);
         LOGGER.trace("Reset the Action Button paint");
     }
 
@@ -1667,6 +1674,10 @@ public class ActionButton extends View {
         return DensityConverter.dpToPx(getContext(), dp);
     }
 
+    public Paint getRipplePaint() {
+        return ripplePaint;
+    }
+
     /**
      * Determines the <b>Action Button</b> types
      */
@@ -1860,5 +1871,4 @@ public class ActionButton extends View {
         }
 
     }
-
 }

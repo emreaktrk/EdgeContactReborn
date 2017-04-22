@@ -20,7 +20,7 @@ android {
     }
 }
 
-repositories{
+repositories {
     maven {
         url 'http://dl.bintray.com/amulyakhare/maven'
     }
@@ -28,6 +28,7 @@ repositories{
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.facebook.fresco:fresco:1.2.0'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile project(':fab')

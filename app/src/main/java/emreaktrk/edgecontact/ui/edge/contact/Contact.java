@@ -16,22 +16,22 @@ public class Contact extends RealmObject implements IContact {
     String mPhoto;
     @Ignore Uri mPhotoUri;
 
-    @SuppressWarnings("WeakerAccess") public Contact() {
+    public Contact() {
     }
 
-    Uri uri() {
+    @Override public Uri uri() {
         return Uri.parse("tel:" + mPhone);
     }
 
-    String letter() {
+    @Override public String letter() {
         return mName.substring(0, 1);
     }
 
-    boolean hasPhoto() {
+    @Override public boolean hasPhoto() {
         return !TextUtils.isEmpty(mPhoto);
     }
 
-    Uri photo() {
+    public Uri photo() {
         return hasPhoto() ?
                 mPhotoUri == null ? Uri.parse(mPhoto) : mPhotoUri
                 :
