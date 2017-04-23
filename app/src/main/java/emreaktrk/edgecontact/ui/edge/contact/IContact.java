@@ -11,5 +11,5 @@ interface IContact {
 
     String letter();
 
-    Uri uri();
+    Uri phone();
 }

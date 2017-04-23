@@ -6,41 +6,44 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.WorkerThread;
 
-final class ContractResolver {
+final class ContactResolver {
 
-    private static final int POSITION_DISPLAY_NAME = 0;
-    private static final int POSITION_DATA1 = 1;
-    private static final int POSITION_PHOTO_URI = 2;
+    private static final int POSITION_CONTACT_ID = 0;
+    private static final int POSITION_DISPLAY_NAME = 1;
+    private static final int POSITION_DATA1 = 2;
+    private static final int POSITION_PHOTO_URI = 3;
 
     private static final String[] sProjection = {
+            ContactsContract.Contacts.Entity.CONTACT_ID,
             ContactsContract.Contacts.Entity.DISPLAY_NAME,
             ContactsContract.Contacts.Entity.DATA1,
             ContactsContract.Contacts.Entity.PHOTO_URI};
 
     private Context mContext;
     private Uri mUri;
-    private int mId;
+    private int mPosition;
 
-    public static ContractResolver from(Context context) {
-        ContractResolver builder = new ContractResolver();
+    public static ContactResolver from(Context context) {
+        ContactResolver builder = new ContactResolver();
         builder.mContext = context;
         return builder;
     }
 
-    ContractResolver setUri(Uri uri) {
+    ContactResolver setUri(Uri uri) {
         this.mUri = uri;
 
         return this;
     }
 
-    ContractResolver setId(int id) {
-        this.mId = id;
+    ContactResolver setPosition(int position) {
+        this.mPosition = position;
 
         return this;
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
-    @WorkerThread Contact query() {
+    @WorkerThread
+    Contact query() {
         Cursor cursor = mContext
                 .getContentResolver()
                 .query(
@@ -59,7 +62,10 @@ final class ContractResolver {
         }
 
         Contact contact = new Contact();
-        contact.mId = mId;
+        contact.mPosition = mPosition;
+
+        long id = cursor.getLong(POSITION_CONTACT_ID);
+        contact.mId = id;
 
         String name = cursor.getString(POSITION_DISPLAY_NAME);
         contact.mName = name;
@@ -67,8 +73,10 @@ final class ContractResolver {
         String data = cursor.getString(POSITION_DATA1);
         contact.mPhone = new Phone(data);
 
-        String uri = cursor.getString(POSITION_PHOTO_URI);
-        contact.mPhoto = uri;
+        String photo = cursor.getString(POSITION_PHOTO_URI);
+        contact.mPhoto = photo;
+
+        contact.mUri = mUri.toString();
 
         if (!cursor.isClosed()) {
             cursor.close();

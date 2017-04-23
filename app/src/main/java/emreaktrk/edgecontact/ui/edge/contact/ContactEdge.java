@@ -15,61 +15,83 @@ import emreaktrk.edgecontact.logger.Logger;
 import emreaktrk.edgecontact.permission.PermissionHelper;
 import emreaktrk.edgecontact.ui.edge.Edge;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 
-public final class ContactEdge extends Edge implements ContactAdapter.IDelegate {
+public final class ContactEdge extends Edge implements ContactAdapter.IDelegate, ContactSync.Publisher {
 
     private static final int REQUEST_CODE = 568;
 
     private RecyclerView mRecyclerView;
     private ContactAdapter mAdapter;
 
-    @Override protected int getLayoutResId() {
+    @Override
+    protected int getLayoutResId() {
         return R.layout.cell_contact;
     }
 
-    @Override protected void onViewInflated(View view) {
+    @Override
+    protected void onViewInflated(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.contact_recycler);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         mAdapter = new ContactAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
         PermissionHelper.contact(getActivity(), new PermissionHelper.Callback() {
-            @Override public void onRationale() {
+            @Override
+            public void onRationale() {
                 // TODO Show information dialog
             }
 
-            @Override public void onGranted() {
+            @Override
+            public void onGranted() {
 
             }
         });
     }
 
-    @Override public void onCallClicked(final Contact contact) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ContactSync.register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ContactSync.unregister();
+    }
+
+    @Override
+    public void onCallClicked(final Contact contact) {
         PermissionHelper.call(getActivity(), new PermissionHelper.Callback() {
-            @Override public void onRationale() {
+            @Override
+            public void onRationale() {
                 // TODO Show information dialog
             }
 
-            @Override public void onGranted() {
-                call(contact.uri());
+            @Override
+            public void onGranted() {
+                call(contact.phone());
             }
         });
 
     }
 
-    @Override public void onAddClicked() {
+    @Override
+    public void onAddClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode != REQUEST_CODE) {
@@ -80,10 +102,10 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
             return;
         }
 
-        final Contact contact = ContractResolver
+        final Contact contact = ContactResolver
                 .from(getContext())
                 .setUri(data.getData())
-                .setId(mAdapter.getSelectedPosition())
+                .setPosition(mAdapter.getSelectedPosition())
                 .query();
 
         if (contact == null) {
@@ -94,7 +116,8 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
                 .getDefaultInstance()
                 .executeTransaction(
                         new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
                                 mAdapter.notifyItemChanged();
 
@@ -109,5 +132,10 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
         startActivity(intent);
 
         getActivity().finish();
+    }
+
+    @Override
+    public void onUpdated() {
+        mAdapter.notifyDataSetChanged();
     }
 }

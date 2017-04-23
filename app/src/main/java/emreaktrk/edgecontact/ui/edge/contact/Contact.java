@@ -10,24 +10,31 @@ import io.realm.annotations.PrimaryKey;
 
 public class Contact extends RealmObject implements IContact {
 
-    @PrimaryKey long mId;
+    @PrimaryKey
+    long mId;
     Phone mPhone;
     String mName;
     String mPhoto;
-    @Ignore Uri mPhotoUri;
+    String mUri;
+    int mPosition;
+    @Ignore
+    Uri mPhotoUri;
 
     public Contact() {
     }
 
-    @Override public Uri uri() {
-        return Uri.parse("tel:" + mPhone);
+    @Override
+    public Uri phone() {
+        return Uri.parse("tel:" + mPhone.mData);
     }
 
-    @Override public String letter() {
+    @Override
+    public String letter() {
         return mName.substring(0, 1);
     }
 
-    @Override public boolean hasPhoto() {
+    @Override
+    public boolean hasPhoto() {
         return !TextUtils.isEmpty(mPhoto);
     }
 
@@ -38,12 +45,19 @@ public class Contact extends RealmObject implements IContact {
                 null;
     }
 
-    @Override public String toString() {
+    public Uri data() {
+        return Uri.parse(mUri);
+    }
+
+    @Override
+    public String toString() {
         return "{" +
                 "id=" + mId +
                 ", phone=" + mPhone.toString() +
                 ", name='" + mName + '\'' +
                 ", photo='" + mPhoto + '\'' +
+                ", uri='" + mUri + '\'' +
+                ", position='" + mPosition + '\'' +
                 '}';
     }
 }
