@@ -18,6 +18,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        pro {
+            buildConfigField "Boolean", "HAS_PRO", "true"
+        }
+        free {
+            buildConfigField "Boolean", "HAS_PRO", "false"
+        }
+    }
 }
 
 repositories {
@@ -39,3 +47,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
 }
+
+
+

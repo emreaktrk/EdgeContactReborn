@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -134,8 +135,8 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate,
         getActivity().finish();
     }
 
-    @Override
-    public void onSync() {
+    @MainThread
+    @Override public void onSync() {
         mAdapter.notifyDataSetChanged();
     }
 }

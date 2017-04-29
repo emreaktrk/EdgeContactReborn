@@ -1,5 +1,6 @@
 package emreaktrk.edgecontact.ui.edge;
 
+import emreaktrk.edgecontact.BuildConfig;
 import emreaktrk.edgecontact.pattern.factory.PagerFactory;
 import emreaktrk.edgecontact.ui.edge.contact.ContactEdge;
 import emreaktrk.edgecontact.ui.edge.task.TaskEdge;
@@ -7,7 +8,7 @@ import emreaktrk.edgecontact.ui.edge.weather.WeatherEdge;
 
 final class EdgeFactory extends PagerFactory<Edge> {
 
-    private static final int COUNT = 3;
+    private static final int COUNT = BuildConfig.HAS_PRO ? 3 : 1;
 
     @Override public Edge getItem(int position) {
         switch (position) {

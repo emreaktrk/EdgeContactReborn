@@ -6,8 +6,11 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.ContactsContract;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
 import java.util.Collections;
@@ -88,11 +91,20 @@ public final class ContactSync extends Service {
             update(raw);
         }
 
-        if (mPublisher != null) {
-            mPublisher.onSync();
+        publish();
+    }
 
-            Logger.i("Published contacts");
-        }
+    private void publish() {
+        new Handler(Looper.getMainLooper())
+                .post(new Runnable() {
+                    @Override public void run() {
+                        if (mPublisher != null) {
+                            mPublisher.onSync();
+
+                            Logger.i("Published contacts");
+                        }
+                    }
+                });
     }
 
     private void update(@NonNull final Contact contact) {
