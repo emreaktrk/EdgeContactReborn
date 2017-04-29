@@ -71,7 +71,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo());
             RoundedBitmapDrawable rounded = new RoundedBitmapDrawable(context.getResources(), bitmap);
-            rounded.setBorder(Color.parseColor("#EEEEEE"), DensityConverter.dpToPx(context, 5));
+            rounded.setBorder(Color.WHITE, DensityConverter.dpToPx(context, 5));
             rounded.setCircle(true);
 
             return rounded;

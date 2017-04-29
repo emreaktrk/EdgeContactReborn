@@ -53,7 +53,7 @@ final class ContactResolver {
                         null,
                         null);
 
-        if (cursor == null) {
+        if (cursor == null || cursor.getCount() == 0) {
             return null;
         }
 

@@ -135,7 +135,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate,
     }
 
     @Override
-    public void onUpdated() {
+    public void onSync() {
         mAdapter.notifyDataSetChanged();
     }
 }

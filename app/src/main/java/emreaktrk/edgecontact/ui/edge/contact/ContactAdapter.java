@@ -35,7 +35,11 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
                 .equalTo(ContactContractor.Columns.POSITION, position)
                 .findFirst();
 
-        holder.mView.setContact(proxy);
+        if (proxy == null || !proxy.isValid()) {
+            holder.mView.setContact(null);
+        } else {
+            holder.mView.setContact(proxy);
+        }
     }
 
     @Override
