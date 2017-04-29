@@ -3,23 +3,14 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.facebook.drawee.drawable.RoundedBitmapDrawable;
 import com.scalified.fab.ActionButton;
 import com.scalified.uitools.convert.DensityConverter;
-
-import java.io.IOException;
-
-import emreaktrk.edgecontact.logger.Logger;
 
 public final class ContactView extends ActionButton implements View.OnClickListener {
 
@@ -83,20 +74,6 @@ public final class ContactView extends ActionButton implements View.OnClickListe
         return mContact != null;
     }
 
-    private RoundedBitmapDrawable getRoundedPhoto() {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mContact.photo());
-            RoundedBitmapDrawable rounded = new RoundedBitmapDrawable(getResources(), bitmap);
-            rounded.setCircle(true);
-
-            return rounded;
-        } catch (IOException e) {
-            Logger.e("Photo Uri is invalid.");
-        }
-
-        return null;
-    }
-
     @WorkerThread
     private void clear() {
         // TODO Clear state
@@ -106,16 +83,7 @@ public final class ContactView extends ActionButton implements View.OnClickListe
     @WorkerThread private void apply() {
         final float size = DensityConverter.pxToDp(getContext(), getSize());
 
-        final Drawable drawable = mContact.hasPhoto() ?
-                getRoundedPhoto()
-                :
-                TextDrawable
-                        .builder()
-                        .beginConfig()
-                        .textColor(Color.BLACK)
-                        .bold()
-                        .endConfig()
-                        .buildRound(mContact.letter(), Color.TRANSPARENT);
+        final Drawable drawable = mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
 
         post(new Runnable() {
             @Override public void run() {

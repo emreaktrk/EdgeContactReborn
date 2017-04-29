@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import emreaktrk.edgecontact.R;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 
 final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
 

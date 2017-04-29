@@ -3,6 +3,7 @@ package emreaktrk.edgecontact.permission;
 
 import android.Manifest;
 import android.app.Activity;
+import android.graphics.drawable.Icon;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 

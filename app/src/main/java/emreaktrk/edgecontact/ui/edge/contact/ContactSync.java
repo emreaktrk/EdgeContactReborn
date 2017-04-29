@@ -2,33 +2,44 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
 
+import emreaktrk.edgecontact.agent.shortcut.IShortcut;
 import emreaktrk.edgecontact.logger.Logger;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 public final class ContactSync extends Service {
 
-    private ContactObserver mObserver;
     private volatile static Publisher mPublisher;
+    private ContactObserver mObserver;
 
     public ContactSync() {
         mObserver = new ContactObserver();
+    }
+
+    public static void register(Publisher publisher) {
+        mPublisher = publisher;
+    }
+
+    public static void unregister() {
+        mPublisher = null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, false, mObserver);
+        getContentResolver().registerContentObserver(ContactsContract.ProfileSyncState.CONTENT_URI, false, mObserver);
     }
 
     @Override
@@ -68,6 +79,8 @@ public final class ContactSync extends Service {
             update(raw);
         }
 
+        shortcuts(all);
+
         if (mPublisher != null) {
             mPublisher.onUpdated();
 
@@ -75,16 +88,44 @@ public final class ContactSync extends Service {
         }
     }
 
-    public static void register(Publisher publisher) {
-        mPublisher = publisher;
-    }
+    @SuppressWarnings("ConstantConditions") private void shortcuts(RealmResults<Contact> all) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            return;
+        }
 
-    public static void unregister() {
-        mPublisher = null;
+        ArrayList<ShortcutInfo> shortcuts = new ArrayList<>();
+
+        for (Contact proxy : all) {
+            Contact concrete = Realm
+                    .getDefaultInstance()
+                    .copyFromRealm(proxy);
+
+            IShortcut raw = ContactResolver
+                    .from(getApplicationContext())
+                    .setUri(concrete.data())
+                    .setPosition(concrete.mPosition)
+                    .query();
+
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(
+                    getApplicationContext(), raw.getId())
+                    .setShortLabel(raw.getShortLabel())
+                    .setLongLabel(raw.getLongLabel())
+                    .setIcon(raw.getIcon(getApplicationContext()))
+                    .setIntent(raw.getIntent())
+                    .build();
+
+            shortcuts.add(shortcut);
+        }
+
+        ShortcutManager manager = getSystemService(ShortcutManager.class);
+        manager.addDynamicShortcuts(shortcuts);
+
+        Logger.i("Updated shortcuts");
     }
 
     private void update(@Nullable final Contact contact) {
         if (contact == null) {
+            // TODO Delete contact from realm
             return;
         }
 
@@ -96,10 +137,14 @@ public final class ContactSync extends Service {
                             public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
 
-                                Logger.i("Contact update");
+                                Logger.i("Updated contacts");
                                 Logger.json(contact);
                             }
                         });
+    }
+
+    interface Publisher {
+        void onUpdated();
     }
 
     final class ContactObserver extends ContentObserver {
@@ -117,9 +162,5 @@ public final class ContactSync extends Service {
 
             Logger.i(uri.toString());
         }
-    }
-
-    interface Publisher {
-        void onUpdated();
     }
 }
