@@ -2,6 +2,7 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.ContentObserver;
@@ -10,8 +11,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.provider.ContactsContract;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.Collections;
 
@@ -21,20 +22,12 @@ import io.realm.RealmResults;
 
 public final class ContactSync extends Service {
 
-    private volatile static Publisher mPublisher;
     private ContactObserver mObserver;
 
     public ContactSync() {
         mObserver = new ContactObserver();
     }
 
-    public static void register(Publisher publisher) {
-        mPublisher = publisher;
-    }
-
-    public static void unregister() {
-        mPublisher = null;
-    }
 
     @Override
     public void onCreate() {
@@ -83,7 +76,7 @@ public final class ContactSync extends Service {
                     .setPosition(concrete.mPosition)
                     .query();
 
-            if (raw == null) {
+            if (raw == null && proxy.isValid()) {
                 delete(proxy);
                 continue;
             }
@@ -95,26 +88,21 @@ public final class ContactSync extends Service {
     }
 
     private void publish() {
-        new Handler(Looper.getMainLooper())
-                .post(new Runnable() {
-                    @Override public void run() {
-                        if (mPublisher != null) {
-                            mPublisher.onSync();
+        LocalBroadcastManager
+                .getInstance(getApplicationContext())
+                .sendBroadcastSync(new Intent(ContactEdge.PublishEvent.EVENT_PUBLISH));
 
-                            Logger.i("Published contacts");
-                        }
-                    }
-                });
+        Logger.i("Published contacts");
     }
 
     private void update(@NonNull final Contact contact) {
         Realm
                 .getDefaultInstance()
                 .executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         realm.copyToRealmOrUpdate(contact);
 
-                        Logger.i("Updated contact");
                         Logger.json(contact);
                     }
                 });
@@ -131,16 +119,17 @@ public final class ContactSync extends Service {
             ShortcutManager manager = getSystemService(ShortcutManager.class);
             manager.addDynamicShortcuts(Collections.singletonList(shortcut));
         }
+
+        Logger.i("Updated contact");
     }
 
     private void delete(@NonNull final Contact contact) {
         Realm
                 .getDefaultInstance()
                 .executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         contact.deleteFromRealm();
-
-                        Logger.i("Deleted contact");
                     }
                 });
 
@@ -148,10 +137,8 @@ public final class ContactSync extends Service {
             ShortcutManager manager = getSystemService(ShortcutManager.class);
             manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
         }
-    }
 
-    interface Publisher {
-        void onSync();
+        Logger.i("Deleted contact");
     }
 
     final class ContactObserver extends ContentObserver {

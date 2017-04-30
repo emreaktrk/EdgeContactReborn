@@ -1,15 +1,23 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import java.util.Collections;
 
 import emreaktrk.edgecontact.R;
 import emreaktrk.edgecontact.logger.Logger;
@@ -17,12 +25,13 @@ import emreaktrk.edgecontact.permission.PermissionHelper;
 import emreaktrk.edgecontact.ui.edge.Edge;
 import io.realm.Realm;
 
-public final class ContactEdge extends Edge implements ContactAdapter.IDelegate, ContactSync.Publisher {
+public final class ContactEdge extends Edge implements ContactAdapter.IDelegate {
 
     private static final int REQUEST_CODE = 568;
 
     private RecyclerView mRecyclerView;
     private ContactAdapter mAdapter;
+    private PublishEvent mEvent;
 
     @Override
     protected int getLayoutResId() {
@@ -58,14 +67,30 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ContactSync.register(this);
+        registerEvent();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        ContactSync.unregister();
+        unregisterEvent();
+    }
+
+    private void registerEvent() {
+        if (mEvent == null) {
+            mEvent = new PublishEvent();
+        }
+
+        LocalBroadcastManager
+                .getInstance(getContext())
+                .registerReceiver(mEvent, new IntentFilter(PublishEvent.EVENT_PUBLISH));
+    }
+
+    private void unregisterEvent() {
+        LocalBroadcastManager
+                .getInstance(getContext())
+                .unregisterReceiver(mEvent);
     }
 
     @Override
@@ -123,8 +148,22 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate,
                                 mAdapter.notifyItemChanged();
 
                                 Logger.json(contact);
+                                Logger.i("Contact added");
                             }
                         });
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(
+                    getContext(), contact.getId())
+                    .setShortLabel(contact.getShortLabel())
+                    .setLongLabel(contact.getLongLabel())
+                    .setIcon(contact.getIcon(getContext()))
+                    .setIntent(contact.getIntent())
+                    .build();
+
+            ShortcutManager manager = getContext().getSystemService(ShortcutManager.class);
+            manager.addDynamicShortcuts(Collections.singletonList(shortcut));
+        }
     }
 
     private void call(Uri uri) {
@@ -135,8 +174,13 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate,
         getActivity().finish();
     }
 
-    @MainThread
-    @Override public void onSync() {
-        mAdapter.notifyDataSetChanged();
+    public class PublishEvent extends BroadcastReceiver {
+
+        public static final String EVENT_PUBLISH = "PUBLISH";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
