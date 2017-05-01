@@ -35,10 +35,14 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
                 .equalTo(ContactContractor.Columns.POSITION, position)
                 .findFirst();
 
-        if (proxy == null || !proxy.isValid()) {
+        if (proxy == null) {
             holder.mView.setContact(null);
         } else {
-            holder.mView.setContact(proxy);
+            Contact concrete = Realm
+                    .getDefaultInstance()
+                    .copyFromRealm(proxy);
+
+            holder.mView.setContact(concrete);
         }
     }
 

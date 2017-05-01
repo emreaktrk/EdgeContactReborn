@@ -2,14 +2,11 @@ package emreaktrk.edgecontact.ui.edge.contact;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.ContentObserver;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -62,10 +59,6 @@ public final class ContactSync extends Service {
                 .findAll();
 
         for (Contact proxy : all) {
-            if (!proxy.isValid()) {
-                continue;
-            }
-
             Contact concrete = Realm
                     .getDefaultInstance()
                     .copyFromRealm(proxy);
@@ -76,12 +69,11 @@ public final class ContactSync extends Service {
                     .setPosition(concrete.mPosition)
                     .query();
 
-            if (raw == null && proxy.isValid()) {
+            if (raw == null) {
                 delete(proxy);
-                continue;
+            } else {
+                update(raw);
             }
-
-            update(raw);
         }
 
         publish();
@@ -124,6 +116,11 @@ public final class ContactSync extends Service {
     }
 
     private void delete(@NonNull final Contact contact) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager manager = getSystemService(ShortcutManager.class);
+            manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
+        }
+
         Realm
                 .getDefaultInstance()
                 .executeTransaction(new Realm.Transaction() {
@@ -133,11 +130,6 @@ public final class ContactSync extends Service {
                     }
                 });
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-            ShortcutManager manager = getSystemService(ShortcutManager.class);
-            manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
-        }
-
         Logger.i("Deleted contact");
     }
 
@@ -146,7 +138,6 @@ public final class ContactSync extends Service {
         ContactObserver() {
             super(null);
         }
-
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {

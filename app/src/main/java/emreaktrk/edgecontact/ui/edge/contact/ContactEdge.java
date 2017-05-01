@@ -10,7 +10,6 @@ import android.content.pm.ShortcutManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -180,7 +179,11 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            mAdapter.notifyDataSetChanged();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                }
+            });
         }
     }
 }
