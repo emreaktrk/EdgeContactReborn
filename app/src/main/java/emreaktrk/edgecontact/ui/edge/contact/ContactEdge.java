@@ -181,7 +181,8 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
         public void onReceive(Context context, Intent intent) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    mAdapter = new ContactAdapter(ContactEdge.this);
+                    mRecyclerView.setAdapter(mAdapter);
                 }
             });
         }
