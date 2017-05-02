@@ -47,10 +47,6 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
         return mPosition;
     }
 
-    void notifyItemChanged() {
-        notifyItemChanged(mPosition);
-    }
-
     public interface IDelegate {
 
         void onCallClicked(Contact contact);

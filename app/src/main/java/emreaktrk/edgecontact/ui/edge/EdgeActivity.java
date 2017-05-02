@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.view.WindowManager;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -28,11 +29,7 @@ public final class EdgeActivity extends BaseActivity {
     @Override public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (PrefsManager
-                .getInstance(this)
-                .isFirst()) {
-            TutorialActivity.start(this);
-        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +37,12 @@ public final class EdgeActivity extends BaseActivity {
 
         loadWallpaper();
         loadEdges();
+    }
+
+    @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        showTutorialIfNecessary();
     }
 
     @Override public void onContentChanged() {
@@ -65,8 +68,7 @@ public final class EdgeActivity extends BaseActivity {
         });
     }
 
-    @WorkerThread
-    private void loadEdges() {
+    @WorkerThread private void loadEdges() {
         final EdgeAdapter adapter = new EdgeAdapter(getSupportFragmentManager());
 
         runOnUiThread(new Runnable() {
@@ -74,5 +76,17 @@ public final class EdgeActivity extends BaseActivity {
                 mPager.setAdapter(adapter);
             }
         });
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    @WorkerThread private boolean showTutorialIfNecessary() {
+        if (PrefsManager
+                .getInstance(this)
+                .isFirst()) {
+            TutorialActivity.start(this);
+            return true;
+        }
+
+        return false;
     }
 }

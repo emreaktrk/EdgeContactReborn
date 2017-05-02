@@ -10,7 +10,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.scalified.fab.ActionButton;
-import com.scalified.uitools.convert.DensityConverter;
+
+import emreaktrk.edgecontact.R;
 
 public final class ContactView extends ActionButton implements View.OnClickListener {
 
@@ -74,20 +75,23 @@ public final class ContactView extends ActionButton implements View.OnClickListe
         return mContact != null;
     }
 
-    @WorkerThread
-    private void clear() {
-        // TODO Clear state
+    @SuppressLint("WrongThread")
+    @WorkerThread private void clear() {
+        post(new Runnable() {
+            @Override public void run() {
+                setImageSizeDp(24.0f);
+                setImageResource(R.drawable.ic_add);
+            }
+        });
     }
 
     @SuppressLint("WrongThread")
     @WorkerThread private void apply() {
-        final float size = DensityConverter.pxToDp(getContext(), getSize());
-
         final Drawable drawable = mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
 
         post(new Runnable() {
             @Override public void run() {
-                setImageSize(size);
+                setImageSizePx(getSize());
                 setImageDrawable(drawable);
             }
         });

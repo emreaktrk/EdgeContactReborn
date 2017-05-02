@@ -20,7 +20,7 @@
         <activity
             android:name=".ui.edge.EdgeActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.MaterialTheme">
+            android:theme="@style/AppTheme.Edge">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -29,12 +29,11 @@
 
         <activity
             android:name=".ui.tutorial.TutorialActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.Tutorial"/>
 
         <service
             android:name=".ui.edge.contact.ContactSync"
             android:enabled="true"
             android:exported="false"/>
-
     </application>
 </manifest>

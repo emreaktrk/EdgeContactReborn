@@ -12,12 +12,6 @@ import emreaktrk.edgecontact.logger.Logger;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    @Override public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-    }
-
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

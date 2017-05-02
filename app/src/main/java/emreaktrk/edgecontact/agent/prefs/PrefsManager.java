@@ -30,6 +30,12 @@ public final class PrefsManager implements IPrefManager {
                     .putString(key, (String) object);
         }
 
+        if (object instanceof Boolean) {
+            return mPreferences
+                    .edit()
+                    .putBoolean(key, (boolean) object);
+        }
+
         throw new IllegalArgumentException("Undefined object type passed.");
     }
 
@@ -56,7 +62,7 @@ public final class PrefsManager implements IPrefManager {
     }
 
     public boolean isFirst() {
-        return mPreferences.getBoolean(PrefsManager.Keys.IS_FIRST, false);
+        return mPreferences.getBoolean(PrefsManager.Keys.IS_FIRST, true);
     }
 
     public void setFirst(boolean value) {

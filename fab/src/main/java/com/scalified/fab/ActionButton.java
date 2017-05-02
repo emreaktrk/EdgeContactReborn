@@ -1211,8 +1211,25 @@ public class ActionButton extends View {
      * @param size size of the <b>Action Button</b> image
      *             specified in density-independent (dp) pixels
      */
-    public void setImageSize(float size) {
+    public void setImageSizeDp(float size) {
         this.imageSize = dpToPx(size);
+        LOGGER.trace("Changed the Action Button image size to: {}", getImageSize());
+    }
+
+    /**
+     * Sets the size of the <b>Action Button</b> image
+     * <p>
+     * Changing the default size of the image breaks the rules of
+     * <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>
+     * <p>
+     * Must be specified in density-independent (dp) pixels, which are
+     * then converted into actual pixels (px)
+     *
+     * @param size size of the <b>Action Button</b> image
+     *           specified in pixels
+     */
+    public void setImageSizePx(float size) {
+        this.imageSize = size;
         LOGGER.trace("Changed the Action Button image size to: {}", getImageSize());
     }
 
@@ -1226,17 +1243,6 @@ public class ActionButton extends View {
     }
 
     /**
-     * Sets the animation, which is used while showing <b>Action Button</b>
-     *
-     * @param animation animation, which is to be used while showing
-     *                  <b>Action Button</b>
-     */
-    public void setShowAnimation(Animation animation) {
-        this.showAnimation = animation;
-        LOGGER.trace("Set the Action Button show animation");
-    }
-
-    /**
      * Sets one of the {@link Animations} as animation, which is used while showing
      * <b>Action Button</b>
      *
@@ -1245,6 +1251,17 @@ public class ActionButton extends View {
      */
     public void setShowAnimation(Animations animation) {
         setShowAnimation(Animations.load(getContext(), animation.animResId));
+    }
+
+    /**
+     * Sets the animation, which is used while showing <b>Action Button</b>
+     *
+     * @param animation animation, which is to be used while showing
+     *                  <b>Action Button</b>
+     */
+    public void setShowAnimation(Animation animation) {
+        this.showAnimation = animation;
+        LOGGER.trace("Set the Action Button show animation");
     }
 
     /**
@@ -1265,17 +1282,6 @@ public class ActionButton extends View {
     }
 
     /**
-     * Sets the animation, which is used while hiding <b>Action Button</b>
-     *
-     * @param animation animation, which is to be used while hiding
-     *                  <b>Action Button</b>
-     */
-    public void setHideAnimation(Animation animation) {
-        this.hideAnimation = animation;
-        LOGGER.trace("Set the Action Button hide animation");
-    }
-
-    /**
      * Sets one of the {@link Animations} as animation, which is used while hiding
      * <b>Action Button</b>
      *
@@ -1284,6 +1290,17 @@ public class ActionButton extends View {
      */
     public void setHideAnimation(Animations animation) {
         setHideAnimation(Animations.load(getContext(), animation.animResId));
+    }
+
+    /**
+     * Sets the animation, which is used while hiding <b>Action Button</b>
+     *
+     * @param animation animation, which is to be used while hiding
+     *                  <b>Action Button</b>
+     */
+    public void setHideAnimation(Animation animation) {
+        this.hideAnimation = animation;
+        LOGGER.trace("Set the Action Button hide animation");
     }
 
     /**
@@ -1670,8 +1687,18 @@ public class ActionButton extends View {
      * @param dp density-independent value
      * @return density-dependent value
      */
-    protected float dpToPx(float dp) {
-        return DensityConverter.dpToPx(getContext(), dp);
+    protected int dpToPx(float dp) {
+        return (int) DensityConverter.dpToPx(getContext(), dp);
+    }
+
+    /**
+     * Converts the density-independent value into density-dependent one
+     *
+     * @param px pixels value
+     * @return density-dependent value
+     */
+    protected float pxToDp(int px) {
+        return DensityConverter.pxToDp(getContext(), px);
     }
 
     public Paint getRipplePaint() {

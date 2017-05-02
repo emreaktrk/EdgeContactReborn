@@ -47,7 +47,6 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
         mAdapter = new ContactAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutFrozen(true);
 
         PermissionHelper.contact(getActivity(), new PermissionHelper.Callback() {
             @Override
@@ -144,12 +143,13 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
                             @Override
                             public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
-                                mAdapter.notifyItemChanged();
 
                                 Logger.json(contact);
-                                Logger.i("Contact added");
+                                Logger.i("Contact added or updated.");
                             }
                         });
+
+        mAdapter.notifyDataSetChanged();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
             ShortcutInfo shortcut = new ShortcutInfo.Builder(

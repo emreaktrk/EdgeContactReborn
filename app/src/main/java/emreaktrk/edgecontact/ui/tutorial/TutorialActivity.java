@@ -4,16 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.scalified.fab.ActionButton;
+
 import emreaktrk.edgecontact.R;
+import emreaktrk.edgecontact.agent.prefs.PrefsManager;
 import emreaktrk.edgecontact.ui.BaseActivity;
 
 
 public final class TutorialActivity extends BaseActivity {
 
-    private ViewPager mPager;
+    private TutorialViewPager mPager;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, TutorialActivity.class);
@@ -27,7 +29,7 @@ public final class TutorialActivity extends BaseActivity {
     @Override public void onContentChanged() {
         super.onContentChanged();
 
-        mPager = (ViewPager) findViewById(R.id.tutorial_pager);
+        mPager = (TutorialViewPager) findViewById(R.id.tutorial_pager);
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +39,21 @@ public final class TutorialActivity extends BaseActivity {
         mPager.setAdapter(adapter);
     }
 
-    public void onSkipClicked(View view) {
-        finish();
+    public void onNextClicked(View view) {
+        if (mPager.next()) {
+            if (mPager.isLastPage()) {
+                ((ActionButton) view).setImageResource(R.drawable.ic_done);
+            }
+        } else {
+            PrefsManager
+                    .getInstance(this)
+                    .setFirst(false);
+
+            finish();
+        }
+    }
+
+    @Override public void onBackPressed() {
+        finishAffinity();
     }
 }
