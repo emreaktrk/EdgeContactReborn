@@ -1,10 +1,8 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.net.Uri;
@@ -19,6 +17,7 @@ import android.view.View;
 import java.util.Collections;
 
 import emreaktrk.edgecontact.R;
+import emreaktrk.edgecontact.agent.event.Event;
 import emreaktrk.edgecontact.logger.Logger;
 import emreaktrk.edgecontact.permission.PermissionHelper;
 import emreaktrk.edgecontact.ui.edge.Edge;
@@ -48,6 +47,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
         mAdapter = new ContactAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutFrozen(true);
 
         PermissionHelper.contact(getActivity(), new PermissionHelper.Callback() {
             @Override
@@ -83,7 +83,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
         LocalBroadcastManager
                 .getInstance(getContext())
-                .registerReceiver(mEvent, new IntentFilter(PublishEvent.EVENT_PUBLISH));
+                .registerReceiver(mEvent, PublishEvent.getIntentFilter());
     }
 
     private void unregisterEvent() {
@@ -173,18 +173,11 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
         getActivity().finish();
     }
 
-    public class PublishEvent extends BroadcastReceiver {
-
-        public static final String EVENT_PUBLISH = "PUBLISH";
+    public class PublishEvent extends Event {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    mAdapter = new ContactAdapter(ContactEdge.this);
-                    mRecyclerView.setAdapter(mAdapter);
-                }
-            });
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 
-public final class EdgeAdapter extends FragmentPagerAdapter {
+final class EdgeAdapter extends FragmentPagerAdapter {
 
     private EdgeFactory mFactory;
 
-    public EdgeAdapter(FragmentManager manager) {
+    EdgeAdapter(FragmentManager manager) {
         super(manager);
 
         mFactory = new EdgeFactory();

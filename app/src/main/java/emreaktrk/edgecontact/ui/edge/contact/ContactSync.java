@@ -6,7 +6,9 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,14 +27,13 @@ public final class ContactSync extends Service {
         mObserver = new ContactObserver();
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
 
         getContentResolver().registerContentObserver(ContactsContract.ProfileSyncState.CONTENT_URI, true, mObserver);
 
-        Logger.i("Sync service is ready");
+        Logger.i("Sync registered.");
     }
 
     @Override
@@ -40,6 +41,8 @@ public final class ContactSync extends Service {
         super.onDestroy();
 
         getContentResolver().unregisterContentObserver(mObserver);
+
+        Logger.i("Sync unregistered.");
     }
 
     @Override
@@ -59,14 +62,10 @@ public final class ContactSync extends Service {
                 .findAll();
 
         for (Contact proxy : all) {
-            Contact concrete = Realm
-                    .getDefaultInstance()
-                    .copyFromRealm(proxy);
-
             Contact raw = ContactResolver
                     .from(getApplicationContext())
-                    .setUri(concrete.data())
-                    .setPosition(concrete.mPosition)
+                    .setUri(proxy.data())
+                    .setPosition(proxy.mPosition)
                     .query();
 
             if (raw == null) {
@@ -82,7 +81,7 @@ public final class ContactSync extends Service {
     private void publish() {
         LocalBroadcastManager
                 .getInstance(getApplicationContext())
-                .sendBroadcastSync(new Intent(ContactEdge.PublishEvent.EVENT_PUBLISH));
+                .sendBroadcastSync(ContactEdge.PublishEvent.getIntent());
 
         Logger.i("Published contacts");
     }
@@ -136,7 +135,7 @@ public final class ContactSync extends Service {
     final class ContactObserver extends ContentObserver {
 
         ContactObserver() {
-            super(null);
+            super(new Handler(Looper.getMainLooper()));
         }
 
         @Override

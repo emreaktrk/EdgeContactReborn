@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
-import emreaktrk.edgecontact.ui.edge.contact.Contact;
+import emreaktrk.edgecontact.agent.prefs.PrefsManager;
 import emreaktrk.edgecontact.ui.edge.contact.ContactSync;
 import io.realm.Realm;
 

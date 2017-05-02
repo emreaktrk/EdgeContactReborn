@@ -12,7 +12,9 @@ import android.support.v4.view.ViewPager;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import emreaktrk.edgecontact.R;
+import emreaktrk.edgecontact.agent.prefs.PrefsManager;
 import emreaktrk.edgecontact.ui.BaseActivity;
+import emreaktrk.edgecontact.ui.tutorial.TutorialActivity;
 
 public final class EdgeActivity extends BaseActivity {
 
@@ -21,6 +23,16 @@ public final class EdgeActivity extends BaseActivity {
 
     @Override protected int getLayoutResId() {
         return R.layout.layout_launch;
+    }
+
+    @Override public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (PrefsManager
+                .getInstance(this)
+                .isFirst()) {
+            TutorialActivity.start(this);
+        }
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {

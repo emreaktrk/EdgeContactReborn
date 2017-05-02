@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.text.TextUtils;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -32,8 +33,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
     String mPhoto;
     String mUri;
     int mPosition;
-    @Ignore
-    Uri mPhotoUri;
+    @Ignore Uri mPhotoUri;
 
     public Contact() {
     }
@@ -64,7 +64,17 @@ public class Contact extends RealmObject implements IContact, IShortcut {
                 .textColor(Color.BLACK)
                 .bold()
                 .endConfig()
-                .buildRound(letter(), Color.parseColor("#EEEEEE"));
+                .buildRound(letter(), Color.WHITE);
+    }
+
+    public Drawable letterDrawable(@ColorInt int color) {
+        return TextDrawable
+                .builder()
+                .beginConfig()
+                .textColor(Color.BLACK)
+                .bold()
+                .endConfig()
+                .buildRound(letter(), color);
     }
 
     @Override public Drawable borderedPhoto(Context context) {
@@ -120,7 +130,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
     }
 
     @Override public Icon getIcon(Context context) {
-        Drawable drawable = hasPhoto() ? borderedPhoto(context) : letterDrawable();
+        Drawable drawable = hasPhoto() ? borderedPhoto(context) : letterDrawable(Color.parseColor("#EEEEEE"));
         Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, 256, 256);

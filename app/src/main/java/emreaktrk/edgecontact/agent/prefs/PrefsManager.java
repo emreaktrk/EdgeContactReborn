@@ -8,15 +8,14 @@ import android.support.annotation.NonNull;
 public final class PrefsManager implements IPrefManager {
 
     private static final String NAME = "EDGE_PREF";
-
+    private static PrefsManager sInstance;
     private final SharedPreferences mPreferences;
-    private PrefsManager sInstance;
 
     private PrefsManager(Context context) {
         mPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
-    public PrefsManager getInstance(Context context) {
+    public static PrefsManager getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new PrefsManager(context);
         }
@@ -47,6 +46,24 @@ public final class PrefsManager implements IPrefManager {
             mPreferences.getInt(key, -1);
         }
 
+        if (type
+                .getClass()
+                .equals(Boolean.class)) {
+            mPreferences.getBoolean(key, false);
+        }
+
         throw new IllegalArgumentException("Undefined object type passed.");
+    }
+
+    public boolean isFirst() {
+        return mPreferences.getBoolean(PrefsManager.Keys.IS_FIRST, false);
+    }
+
+    public void setFirst(boolean value) {
+        save(Keys.IS_FIRST, value).apply();
+    }
+
+    private static class Keys {
+        private static final String IS_FIRST = "is_first";
     }
 }

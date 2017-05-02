@@ -1226,17 +1226,6 @@ public class ActionButton extends View {
     }
 
     /**
-     * Sets one of the {@link Animations} as animation, which is used while showing
-     * <b>Action Button</b>
-     *
-     * @param animation one of the {@link Animations}, which is to be used while
-     *                  showing <b>Action Button</b>
-     */
-    public void setShowAnimation(Animations animation) {
-        setShowAnimation(Animations.load(getContext(), animation.animResId));
-    }
-
-    /**
      * Sets the animation, which is used while showing <b>Action Button</b>
      *
      * @param animation animation, which is to be used while showing
@@ -1245,6 +1234,17 @@ public class ActionButton extends View {
     public void setShowAnimation(Animation animation) {
         this.showAnimation = animation;
         LOGGER.trace("Set the Action Button show animation");
+    }
+
+    /**
+     * Sets one of the {@link Animations} as animation, which is used while showing
+     * <b>Action Button</b>
+     *
+     * @param animation one of the {@link Animations}, which is to be used while
+     *                  showing <b>Action Button</b>
+     */
+    public void setShowAnimation(Animations animation) {
+        setShowAnimation(Animations.load(getContext(), animation.animResId));
     }
 
     /**
@@ -1265,17 +1265,6 @@ public class ActionButton extends View {
     }
 
     /**
-     * Sets one of the {@link Animations} as animation, which is used while hiding
-     * <b>Action Button</b>
-     *
-     * @param animation one of the {@link Animations}, which is to be used while
-     *                  hiding <b>Action Button</b>
-     */
-    public void setHideAnimation(Animations animation) {
-        setHideAnimation(Animations.load(getContext(), animation.animResId));
-    }
-
-    /**
      * Sets the animation, which is used while hiding <b>Action Button</b>
      *
      * @param animation animation, which is to be used while hiding
@@ -1284,6 +1273,17 @@ public class ActionButton extends View {
     public void setHideAnimation(Animation animation) {
         this.hideAnimation = animation;
         LOGGER.trace("Set the Action Button hide animation");
+    }
+
+    /**
+     * Sets one of the {@link Animations} as animation, which is used while hiding
+     * <b>Action Button</b>
+     *
+     * @param animation one of the {@link Animations}, which is to be used while
+     *                  hiding <b>Action Button</b>
+     */
+    public void setHideAnimation(Animations animation) {
+        setHideAnimation(Animations.load(getContext(), animation.animResId));
     }
 
     /**
