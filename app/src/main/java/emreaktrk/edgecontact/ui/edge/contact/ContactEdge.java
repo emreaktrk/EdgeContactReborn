@@ -143,9 +143,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
                             @Override
                             public void execute(Realm realm) {
                                 realm.copyToRealmOrUpdate(contact);
-
-                                Logger.json(contact);
-                                Logger.i("Contact added or updated.");
+                                realm.close();
                             }
                         });
 
@@ -163,6 +161,9 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
             ShortcutManager manager = getContext().getSystemService(ShortcutManager.class);
             manager.addDynamicShortcuts(Collections.singletonList(shortcut));
         }
+
+        Logger.json(contact);
+        Logger.i("Contact added or updated.");
     }
 
     private void call(Uri uri) {

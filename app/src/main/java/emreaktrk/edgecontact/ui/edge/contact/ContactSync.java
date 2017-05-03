@@ -22,6 +22,7 @@ import io.realm.RealmResults;
 public final class ContactSync extends Service {
 
     private ContactObserver mObserver;
+    private Realm mRealm;
 
     public ContactSync() {
         mObserver = new ContactObserver();
@@ -56,6 +57,8 @@ public final class ContactSync extends Service {
     }
 
     private void lookup() {
+        mRealm = Realm.getDefaultInstance();
+
         RealmResults<Contact> all = Realm
                 .getDefaultInstance()
                 .where(Contact.class)
@@ -75,6 +78,8 @@ public final class ContactSync extends Service {
             }
         }
 
+        mRealm.close();
+
         publish();
     }
 
@@ -87,16 +92,12 @@ public final class ContactSync extends Service {
     }
 
     private void update(@NonNull final Contact contact) {
-        Realm
-                .getDefaultInstance()
-                .executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.copyToRealmOrUpdate(contact);
-
-                        Logger.json(contact);
-                    }
-                });
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(contact);
+            }
+        });
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
             ShortcutInfo shortcut = new ShortcutInfo.Builder(
@@ -112,6 +113,7 @@ public final class ContactSync extends Service {
         }
 
         Logger.i("Updated contact");
+        Logger.json(contact);
     }
 
     private void delete(@NonNull final Contact contact) {
@@ -120,14 +122,12 @@ public final class ContactSync extends Service {
             manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
         }
 
-        Realm
-                .getDefaultInstance()
-                .executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        contact.deleteFromRealm();
-                    }
-                });
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                contact.deleteFromRealm();
+            }
+        });
 
         Logger.i("Deleted contact");
     }
