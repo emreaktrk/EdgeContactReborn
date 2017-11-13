@@ -1353,7 +1353,6 @@ public class ActionButton extends View {
         TouchPoint point = new TouchPoint(event.getX(), event.getY());
         boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius());
         int action = event.getAction();
-        Log.i("ACTION", "onTouchEvent: " + action + "inside: " + touchPointInsideCircle);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (touchPointInsideCircle) {

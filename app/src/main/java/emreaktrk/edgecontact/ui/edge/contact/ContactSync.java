@@ -109,7 +109,9 @@ public final class ContactSync extends Service {
                     .build();
 
             ShortcutManager manager = getSystemService(ShortcutManager.class);
-            manager.addDynamicShortcuts(Collections.singletonList(shortcut));
+            if (manager != null) {
+                manager.addDynamicShortcuts(Collections.singletonList(shortcut));
+            }
         }
 
         Logger.i("Updated contact");
@@ -119,7 +121,9 @@ public final class ContactSync extends Service {
     private void delete(@NonNull final Contact contact) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
             ShortcutManager manager = getSystemService(ShortcutManager.class);
-            manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
+            if (manager != null) {
+                manager.removeDynamicShortcuts(Collections.singletonList(contact.getId()));
+            }
         }
 
         mRealm.executeTransaction(new Realm.Transaction() {
