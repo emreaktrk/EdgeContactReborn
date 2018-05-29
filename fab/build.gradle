@@ -22,33 +22,27 @@ if (hasProperty('AAR_PUBLISHING_SCRIPT')) {
 }
 
 android {
-
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    'proguard-rules.pro'
-        }
-    }
-
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.9'
-    compile 'com.scalified:viewmover:1.1.1'
+    api 'org.slf4j:slf4j-api:1.7.9'
+    api 'com.scalified:viewmover:1.1.1'
 }

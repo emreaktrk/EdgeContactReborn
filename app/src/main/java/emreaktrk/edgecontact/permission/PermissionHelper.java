@@ -3,7 +3,6 @@ package emreaktrk.edgecontact.permission;
 
 import android.Manifest;
 import android.app.Activity;
-import android.graphics.drawable.Icon;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 
@@ -11,6 +10,7 @@ public final class PermissionHelper {
 
     private static final int PERMISSION_CALL = 320;
     private static final int PERMISSION_CONTACT = 598;
+    private static final int PERMISSION_STORAGE = 654;
 
     public static void call(Activity activity, Callback callback) {
         String[] permissions = {Manifest.permission.CALL_PHONE};
@@ -45,6 +45,24 @@ public final class PermissionHelper {
 
         callback.onGranted();
     }
+
+    public static void storage(Activity activity, Callback callback) {
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+        int result = PermissionChecker.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (result == PermissionChecker.PERMISSION_DENIED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                callback.onRationale();
+                return;
+            }
+
+            ActivityCompat.requestPermissions(activity, permissions, PERMISSION_STORAGE);
+            return;
+        }
+
+        callback.onGranted();
+    }
+
 
     public interface Callback {
         void onRationale();
