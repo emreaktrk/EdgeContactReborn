@@ -29,7 +29,7 @@ public final class TutorialActivity extends BaseActivity {
     @Override public void onContentChanged() {
         super.onContentChanged();
 
-        mPager = (TutorialViewPager) findViewById(R.id.tutorial_pager);
+        mPager = findViewById(R.id.tutorial_pager);
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {

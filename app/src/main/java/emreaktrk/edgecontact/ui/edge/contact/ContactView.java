@@ -77,11 +77,9 @@ public final class ContactView extends ActionButton implements View.OnClickListe
 
     @SuppressLint("WrongThread")
     @WorkerThread private void clear() {
-        post(new Runnable() {
-            @Override public void run() {
-                setImageSizeDp(24.0f);
-                setImageResource(R.drawable.ic_add);
-            }
+        post(() -> {
+            setImageSizeDp(24.0f);
+            setImageResource(R.drawable.ic_add);
         });
     }
 
@@ -89,11 +87,9 @@ public final class ContactView extends ActionButton implements View.OnClickListe
     @WorkerThread private void apply() {
         final Drawable drawable = mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
 
-        post(new Runnable() {
-            @Override public void run() {
-                setImageSizePx(getSize());
-                setImageDrawable(drawable);
-            }
+        post(() -> {
+            setImageSizePx(getSize());
+            setImageDrawable(drawable);
         });
     }
 

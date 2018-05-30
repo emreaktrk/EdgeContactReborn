@@ -38,8 +38,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
     public Contact() {
     }
 
-    @Override
-    public Uri phone() {
+    @Override public Uri phone() {
         return Uri.parse("tel:" + mPhone.mData);
     }
 
@@ -97,8 +96,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         return mName.substring(0, 1);
     }
 
-    @Override
-    public boolean hasPhoto() {
+    @Override public boolean hasPhoto() {
         return !TextUtils.isEmpty(mPhoto);
     }
 
@@ -113,8 +111,7 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         return Uri.parse(mUri);
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "{" +
                 "id=" + mId +
                 ", phone=" + mPhone.toString() +

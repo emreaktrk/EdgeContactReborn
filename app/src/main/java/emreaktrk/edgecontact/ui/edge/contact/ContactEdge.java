@@ -38,7 +38,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
     @Override
     protected void onViewInflated(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.contact_recycler);
+        mRecyclerView = view.findViewById(R.id.contact_recycler);
     }
 
     @Override
@@ -139,12 +139,9 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
         Realm
                 .getDefaultInstance()
                 .executeTransaction(
-                        new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.copyToRealmOrUpdate(contact);
-                                realm.close();
-                            }
+                        realm -> {
+                            realm.copyToRealmOrUpdate(contact);
+                            realm.close();
                         });
 
         mAdapter.notifyDataSetChanged();
@@ -176,8 +173,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
     public class PublishEvent extends Event {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
+        @Override public void onReceive(Context context, Intent intent) {
             mAdapter.notifyDataSetChanged();
         }
     }

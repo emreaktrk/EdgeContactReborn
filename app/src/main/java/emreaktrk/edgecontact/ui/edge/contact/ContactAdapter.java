@@ -18,8 +18,7 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
         mIDelegate = delegate;
     }
 
-    @Override
-    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View row = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.row_contact, parent, false);
@@ -27,8 +26,7 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
         return new Holder(row);
     }
 
-    @Override
-    public void onBindViewHolder(Holder holder, int position) {
+    @Override public void onBindViewHolder(Holder holder, int position) {
         Contact proxy = Realm
                 .getDefaultInstance()
                 .where(Contact.class)
@@ -38,8 +36,7 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
         holder.mView.setContact(proxy);
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return 5;
     }
 
@@ -69,13 +66,11 @@ final class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> {
             mView.setOnClickListener(this);
         }
 
-        @Override
-        public void onCallClicked(Contact contact, View view) {
+        @Override public void onCallClicked(Contact contact, View view) {
             mIDelegate.onCallClicked(contact);
         }
 
-        @Override
-        public void onAddClicked(View view) {
+        @Override public void onAddClicked(View view) {
             mPosition = getAdapterPosition();
             mIDelegate.onAddClicked();
         }

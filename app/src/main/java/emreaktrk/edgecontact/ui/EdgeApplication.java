@@ -11,8 +11,7 @@ import io.realm.Realm;
 
 public final class EdgeApplication extends Application {
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
 
         Fresco.initialize(this);

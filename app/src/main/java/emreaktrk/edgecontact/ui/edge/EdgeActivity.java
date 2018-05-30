@@ -24,45 +24,39 @@ public final class EdgeActivity extends BaseActivity {
     private SimpleDraweeView mWallpaperView;
     private ViewPager mPager;
 
-    @Override
-    protected int getLayoutResId() {
+    @Override protected int getLayoutResId() {
         return R.layout.layout_launch;
     }
 
-    @Override
-    public void onAttachedToWindow() {
+    @Override public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         loadWallpaper();
         loadEdges();
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+    @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
         showTutorialIfNecessary();
     }
 
-    @Override
-    public void onContentChanged() {
+    @Override public void onContentChanged() {
         super.onContentChanged();
 
-        mWallpaperView = (SimpleDraweeView) findViewById(R.id.edge_wallpaper);
-        mPager = (ViewPager) findViewById(R.id.edge_pager);
+        mWallpaperView = findViewById(R.id.edge_wallpaper);
+        mPager = findViewById(R.id.edge_pager);
     }
 
     @SuppressLint("MissingPermission")
     @SuppressWarnings("deprecation")
-    @WorkerThread
-    private void loadWallpaper() {
+    @WorkerThread private void loadWallpaper() {
         PermissionHelper.storage(this, new PermissionHelper.Callback() {
             @Override
             public void onRationale() {
@@ -78,31 +72,19 @@ public final class EdgeActivity extends BaseActivity {
                 Drawable[] layers = {wallpaper, gradient};
                 final LayerDrawable background = new LayerDrawable(layers);
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWallpaperView.setImageDrawable(background);
-                    }
-                });
+                runOnUiThread(() -> mWallpaperView.setImageDrawable(background));
             }
         });
     }
 
-    @WorkerThread
-    private void loadEdges() {
+    @WorkerThread private void loadEdges() {
         final EdgeAdapter adapter = new EdgeAdapter(getSupportFragmentManager());
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mPager.setAdapter(adapter);
-            }
-        });
+        runOnUiThread(() -> mPager.setAdapter(adapter));
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    @WorkerThread
-    private boolean showTutorialIfNecessary() {
+    @WorkerThread private boolean showTutorialIfNecessary() {
         if (PrefsManager
                 .getInstance(this)
                 .isFirst()) {

@@ -28,8 +28,7 @@ public final class ContactSync extends Service {
         mObserver = new ContactObserver();
     }
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
 
         getContentResolver().registerContentObserver(ContactsContract.ProfileSyncState.CONTENT_URI, true, mObserver);
@@ -37,8 +36,7 @@ public final class ContactSync extends Service {
         Logger.i("Sync registered.");
     }
 
-    @Override
-    public void onDestroy() {
+    @Override public void onDestroy() {
         super.onDestroy();
 
         getContentResolver().unregisterContentObserver(mObserver);
@@ -46,13 +44,11 @@ public final class ContactSync extends Service {
         Logger.i("Sync unregistered.");
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
         return Service.START_NOT_STICKY;
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
+    @Override public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -126,12 +122,7 @@ public final class ContactSync extends Service {
             }
         }
 
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                contact.deleteFromRealm();
-            }
-        });
+        mRealm.executeTransaction(realm -> contact.deleteFromRealm());
 
         Logger.i("Deleted contact");
     }
@@ -142,8 +133,7 @@ public final class ContactSync extends Service {
             super(new Handler(Looper.getMainLooper()));
         }
 
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
+        @Override public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
 
             lookup();

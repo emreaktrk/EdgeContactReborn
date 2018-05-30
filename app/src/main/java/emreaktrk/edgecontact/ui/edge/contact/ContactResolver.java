@@ -42,8 +42,7 @@ final class ContactResolver {
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
-    @WorkerThread
-    Contact query() {
+    @WorkerThread Contact query() {
         Cursor cursor = mContext
                 .getContentResolver()
                 .query(
