@@ -8,6 +8,7 @@ import android.content.pm.ShortcutManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new ContactAdapter(this);
@@ -80,15 +81,19 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
             mEvent = new PublishEvent();
         }
 
-        LocalBroadcastManager
-                .getInstance(getContext())
-                .registerReceiver(mEvent, PublishEvent.getIntentFilter());
+        if (getContext() != null) {
+            LocalBroadcastManager
+                    .getInstance(getContext())
+                    .registerReceiver(mEvent, PublishEvent.getIntentFilter());
+        }
     }
 
     private void unregisterEvent() {
-        LocalBroadcastManager
-                .getInstance(getContext())
-                .unregisterReceiver(mEvent);
+        if (getContext() != null) {
+            LocalBroadcastManager
+                    .getInstance(getContext())
+                    .unregisterReceiver(mEvent);
+        }
     }
 
     @Override
@@ -109,8 +114,8 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
     @Override
     public void onAddClicked() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(ContactsContract.Contacts.CONTENT_URI, ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -155,8 +160,12 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
                     .setIntent(contact.getIntent())
                     .build();
 
-            ShortcutManager manager = getContext().getSystemService(ShortcutManager.class);
-            manager.addDynamicShortcuts(Collections.singletonList(shortcut));
+            if (getContext() != null) {
+                ShortcutManager manager = getContext().getSystemService(ShortcutManager.class);
+                if (manager != null) {
+                    manager.addDynamicShortcuts(Collections.singletonList(shortcut));
+                }
+            }
         }
 
         Logger.json(contact);
@@ -173,7 +182,8 @@ public final class ContactEdge extends Edge implements ContactAdapter.IDelegate 
 
     public class PublishEvent extends Event {
 
-        @Override public void onReceive(Context context, Intent intent) {
+        @Override
+        public void onReceive(Context context, Intent intent) {
             mAdapter.notifyDataSetChanged();
         }
     }

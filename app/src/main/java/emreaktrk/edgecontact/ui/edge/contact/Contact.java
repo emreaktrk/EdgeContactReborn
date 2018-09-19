@@ -12,75 +12,41 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
-
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.facebook.drawee.drawable.RoundedBitmapDrawable;
-import com.scalified.uitools.convert.DensityConverter;
-
-import java.io.IOException;
-
 import emreaktrk.edgecontact.agent.shortcut.IShortcut;
 import emreaktrk.edgecontact.logger.Logger;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
+import java.io.IOException;
+
 public class Contact extends RealmObject implements IContact, IShortcut {
 
-    @PrimaryKey long mId;
+    @PrimaryKey
+    long mId;
     Phone mPhone;
     String mName;
     String mPhoto;
     String mUri;
     int mPosition;
-    @Ignore Uri mPhotoUri;
+    @Ignore
+    Uri mPhotoUri;
 
     public Contact() {
     }
 
-    @Override public Uri phone() {
+    @Override
+    public Uri phone() {
         return Uri.parse("tel:" + mPhone.mData);
     }
 
-    @Override public Drawable roundedPhoto(Context context) {
+    @Override
+    public Drawable roundedPhoto(Context context) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo());
             RoundedBitmapDrawable rounded = new RoundedBitmapDrawable(context.getResources(), bitmap);
-            rounded.setCircle(true);
-
-            return rounded;
-        } catch (IOException e) {
-            Logger.e("Photo Uri is invalid.");
-        }
-
-        return null;
-    }
-
-    @Override public Drawable letterDrawable() {
-        return TextDrawable
-                .builder()
-                .beginConfig()
-                .textColor(Color.BLACK)
-                .bold()
-                .endConfig()
-                .buildRound(letter(), Color.WHITE);
-    }
-
-    public Drawable letterDrawable(@ColorInt int color) {
-        return TextDrawable
-                .builder()
-                .beginConfig()
-                .textColor(Color.BLACK)
-                .bold()
-                .endConfig()
-                .buildRound(letter(), color);
-    }
-
-    @Override public Drawable borderedPhoto(Context context) {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo());
-            RoundedBitmapDrawable rounded = new RoundedBitmapDrawable(context.getResources(), bitmap);
-            rounded.setBorder(Color.WHITE, DensityConverter.dpToPx(context, 5));
             rounded.setCircle(true);
 
             return rounded;
@@ -92,11 +58,29 @@ public class Contact extends RealmObject implements IContact, IShortcut {
     }
 
     @Override
+    public Drawable letterDrawable() {
+        return letterDrawable(Color.BLACK, Color.TRANSPARENT);
+    }
+
+    @Override
+    public Drawable letterDrawable(@ColorInt int text, @ColorInt int color) {
+        return TextDrawable
+                .builder()
+                .beginConfig()
+                .textColor(text)
+                .bold()
+                .fontSize(72)
+                .endConfig()
+                .buildRound(letter(), color);
+    }
+
+    @Override
     public String letter() {
         return mName.substring(0, 1);
     }
 
-    @Override public boolean hasPhoto() {
+    @Override
+    public boolean hasPhoto() {
         return !TextUtils.isEmpty(mPhoto);
     }
 
@@ -111,23 +95,14 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         return Uri.parse(mUri);
     }
 
-    @Override public String toString() {
-        return "{" +
-                "id=" + mId +
-                ", phone=" + mPhone.toString() +
-                ", name='" + mName + '\'' +
-                ", photo='" + mPhoto + '\'' +
-                ", uri='" + mUri + '\'' +
-                ", position='" + mPosition + '\'' +
-                '}';
-    }
-
-    @Override public String getId() {
+    @Override
+    public String getId() {
         return mUri;
     }
 
-    @Override public Icon getIcon(Context context) {
-        Drawable drawable = hasPhoto() ? borderedPhoto(context) : letterDrawable(Color.parseColor("#EEEEEE"));
+    @Override
+    public Icon getIcon(Context context) {
+        Drawable drawable = hasPhoto() ? roundedPhoto(context) : letterDrawable();
         Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, 256, 256);
@@ -136,11 +111,13 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         return Icon.createWithBitmap(bitmap);
     }
 
-    @Override public String getLongLabel() {
+    @Override
+    public String getLongLabel() {
         return mName;
     }
 
-    @Override public String getShortLabel() {
+    @Override
+    public String getShortLabel() {
         if (mName.contains(" ")) {
             return mName.split(" ")[0];
         }
@@ -148,10 +125,23 @@ public class Contact extends RealmObject implements IContact, IShortcut {
         return mName;
     }
 
-    @Override public Intent getIntent() {
+    @Override
+    public Intent getIntent() {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(phone());
 
         return intent;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + mId +
+                ", phone=" + mPhone.toString() +
+                ", name='" + mName + '\'' +
+                ", photo='" + mPhoto + '\'' +
+                ", uri='" + mUri + '\'' +
+                ", position='" + mPosition + '\'' +
+                '}';
     }
 }

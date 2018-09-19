@@ -2,6 +2,7 @@ package emreaktrk.edgecontact.ui;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,15 +14,19 @@ import emreaktrk.edgecontact.logger.Logger;
 
 public abstract class BaseFragment extends Fragment {
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Logger.d(getName() + " created");
     }
 
-    @LayoutRes protected abstract int getLayoutResId();
+    @LayoutRes
+    protected abstract int getLayoutResId();
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View cell = inflater.inflate(getLayoutResId(), container, false);
         onViewInflated(cell);
 

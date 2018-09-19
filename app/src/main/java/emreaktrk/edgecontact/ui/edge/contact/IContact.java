@@ -4,6 +4,7 @@ package emreaktrk.edgecontact.ui.edge.contact;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.ColorInt;
 
 interface IContact {
 
@@ -19,5 +20,5 @@ interface IContact {
 
     Drawable letterDrawable();
 
-    Drawable borderedPhoto(Context context);
+    Drawable letterDrawable(@ColorInt int text, @ColorInt int color);
 }

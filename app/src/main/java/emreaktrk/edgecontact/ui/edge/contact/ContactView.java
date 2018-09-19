@@ -1,29 +1,19 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
+import android.support.annotation.UiThread;
+import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.scalified.fab.ActionButton;
-
 import emreaktrk.edgecontact.R;
 
-public final class ContactView extends ActionButton implements View.OnClickListener {
+public final class ContactView extends FloatingActionButton implements View.OnClickListener {
 
     private OnClickListener mListener;
     private Contact mContact;
-
-
-    public ContactView(Context context) {
-        super(context);
-
-        init();
-    }
 
     public ContactView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,7 +35,8 @@ public final class ContactView extends ActionButton implements View.OnClickListe
         mListener = listener;
     }
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         if (mListener == null) {
             return;
         }
@@ -75,22 +66,16 @@ public final class ContactView extends ActionButton implements View.OnClickListe
         return mContact != null;
     }
 
-    @SuppressLint("WrongThread")
-    @WorkerThread private void clear() {
-        post(() -> {
-            setImageSizeDp(24.0f);
-            setImageResource(R.drawable.ic_add);
-        });
+    @UiThread
+    private void clear() {
+        post(() -> setImageResource(R.drawable.ic_add));
     }
 
-    @SuppressLint("WrongThread")
-    @WorkerThread private void apply() {
+    @UiThread
+    private void apply() {
         final Drawable drawable = mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
 
-        post(() -> {
-            setImageSizePx(getSize());
-            setImageDrawable(drawable);
-        });
+        post(() -> setImageDrawable(drawable));
     }
 
     public interface OnClickListener {

@@ -1,14 +1,3 @@
 <resources>
 
-    <style name="Contact">
-        <item name="button_color">@color/fab_material_white</item>
-        <item name="button_colorPressed">@color/fab_material_white</item>
-        <item name="button_colorRipple">@color/colorRipple</item>
-        <item name="image">@drawable/ic_add</item>
-        <item name="rippleEffect_enabled">true</item>
-        <item name="shadowResponsiveEffect_enabled">true</item>
-        <item name="stroke_color">@color/fab_material_white</item>
-        <item name="stroke_width">3dp</item>
-        <item name="type">DEFAULT</item>
-    </style>
 </resources>

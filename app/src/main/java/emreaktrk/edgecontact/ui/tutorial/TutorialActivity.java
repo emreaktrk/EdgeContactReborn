@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-
-import com.scalified.fab.ActionButton;
 
 import emreaktrk.edgecontact.R;
 import emreaktrk.edgecontact.agent.prefs.PrefsManager;
@@ -22,17 +21,20 @@ public final class TutorialActivity extends BaseActivity {
         context.startActivity(starter);
     }
 
-    @Override protected int getLayoutResId() {
+    @Override
+    protected int getLayoutResId() {
         return R.layout.layout_tutorial;
     }
 
-    @Override public void onContentChanged() {
+    @Override
+    public void onContentChanged() {
         super.onContentChanged();
 
         mPager = findViewById(R.id.tutorial_pager);
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         TutorialAdapter adapter = new TutorialAdapter(getSupportFragmentManager());
@@ -42,7 +44,7 @@ public final class TutorialActivity extends BaseActivity {
     public void onNextClicked(View view) {
         if (mPager.next()) {
             if (mPager.isLastPage()) {
-                ((ActionButton) view).setImageResource(R.drawable.ic_done);
+                ((FloatingActionButton) view).setImageResource(R.drawable.ic_done);
             }
         } else {
             PrefsManager
@@ -53,7 +55,8 @@ public final class TutorialActivity extends BaseActivity {
         }
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         finishAffinity();
     }
 }
