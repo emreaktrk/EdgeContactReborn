@@ -1,6 +1,5 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -8,17 +7,17 @@ import android.support.annotation.ColorInt;
 
 interface IContact {
 
-    boolean hasPhoto();
+  boolean hasPhoto();
 
-    Uri photo();
+  Uri photo();
 
-    String letter();
+  String letter();
 
-    Uri phone();
+  Uri phone();
 
-    Drawable roundedPhoto(Context context);
+  Drawable roundedPhoto(Context context);
 
-    Drawable letterDrawable();
+  Drawable letterDrawable();
 
-    Drawable letterDrawable(@ColorInt int text, @ColorInt int color);
+  Drawable letterDrawable(@ColorInt int text, @ColorInt int color);
 }

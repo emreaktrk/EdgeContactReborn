@@ -1,6 +1,5 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -12,76 +11,77 @@ import emreaktrk.edgecontact.R;
 
 public final class ContactView extends FloatingActionButton implements View.OnClickListener {
 
-    private OnClickListener mListener;
-    private Contact mContact;
+  private OnClickListener mListener;
+  private Contact mContact;
 
-    public ContactView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+  public ContactView(Context context, AttributeSet attrs) {
+    super(context, attrs);
 
-        init();
+    init();
+  }
+
+  public ContactView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+
+    init();
+  }
+
+  private void init() {
+    setOnClickListener(this);
+  }
+
+  public void setOnClickListener(OnClickListener listener) {
+    mListener = listener;
+  }
+
+  @Override
+  public void onClick(View view) {
+    if (mListener == null) {
+      return;
     }
 
-    public ContactView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    if (hasContact()) {
+      mListener.onCallClicked(mContact, this);
+    } else {
+      mListener.onAddClicked(this);
+    }
+  }
 
-        init();
+  public void setContact(@Nullable Contact contact) {
+    mContact = contact;
+    update();
+  }
+
+  private void update() {
+    if (hasContact()) {
+      apply();
+      return;
     }
 
-    private void init() {
-        setOnClickListener(this);
-    }
+    clear();
+  }
 
-    public void setOnClickListener(OnClickListener listener) {
-        mListener = listener;
-    }
+  public boolean hasContact() {
+    return mContact != null;
+  }
 
-    @Override
-    public void onClick(View view) {
-        if (mListener == null) {
-            return;
-        }
+  @UiThread
+  private void clear() {
+    post(() -> setImageResource(R.drawable.ic_add));
+  }
 
-        if (hasContact()) {
-            mListener.onCallClicked(mContact, this);
-        } else {
-            mListener.onAddClicked(this);
-        }
-    }
+  @UiThread
+  private void apply() {
+    final Drawable drawable =
+        mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
 
-    public void setContact(@Nullable Contact contact) {
-        mContact = contact;
-        update();
-    }
+    post(() -> setImageDrawable(drawable));
+  }
 
-    private void update() {
-        if (hasContact()) {
-            apply();
-            return;
-        }
+  public interface OnClickListener {
 
-        clear();
-    }
+    void onCallClicked(Contact contact, View view);
 
-    public boolean hasContact() {
-        return mContact != null;
-    }
-
-    @UiThread
-    private void clear() {
-        post(() -> setImageResource(R.drawable.ic_add));
-    }
-
-    @UiThread
-    private void apply() {
-        final Drawable drawable = mContact.hasPhoto() ? mContact.roundedPhoto(getContext()) : mContact.letterDrawable();
-
-        post(() -> setImageDrawable(drawable));
-    }
-
-    public interface OnClickListener {
-
-        void onCallClicked(Contact contact, View view);
-
-        void onAddClicked(View view);
-    }
+    void onAddClicked(View view);
+  }
 }

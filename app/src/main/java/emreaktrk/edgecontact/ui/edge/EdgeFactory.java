@@ -8,22 +8,24 @@ import emreaktrk.edgecontact.ui.edge.weather.WeatherEdge;
 
 final class EdgeFactory extends PagerFactory<Edge> {
 
-    private static final int COUNT = BuildConfig.HAS_PRO ? 3 : 1;
+  private static final int COUNT = BuildConfig.HAS_PRO ? 3 : 1;
 
-    @Override public Edge getItem(int position) {
-        switch (position) {
-            case 0:
-                return new ContactEdge();
-            case 1:
-                return new TaskEdge();
-            case 2:
-                return new WeatherEdge();
-            default:
-                throw new IllegalArgumentException("Position must be within 0 to " + COUNT);
-        }
+  @Override
+  public Edge getItem(int position) {
+    switch (position) {
+      case 0:
+        return new ContactEdge();
+      case 1:
+        return new TaskEdge();
+      case 2:
+        return new WeatherEdge();
+      default:
+        throw new IllegalArgumentException("Position must be within 0 to " + COUNT);
     }
+  }
 
-    @Override public int getCount() {
-        return COUNT;
-    }
+  @Override
+  public int getCount() {
+    return COUNT;
+  }
 }

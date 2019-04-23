@@ -1,22 +1,20 @@
 package emreaktrk.edgecontact.ui.edge.contact;
 
-
 import io.realm.RealmObject;
 
 public class Phone extends RealmObject implements IPhone {
 
-    String mData;
+  String mData;
 
-    public Phone() {
-    }
+  public Phone() {}
 
-    @SuppressWarnings("WeakerAccess") public Phone(String data) {
-        mData = data;
-    }
+  @SuppressWarnings("WeakerAccess")
+  public Phone(String data) {
+    mData = data;
+  }
 
-    @Override public String toString() {
-        return "{" +
-                "data='" + mData + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "{" + "data='" + mData + '\'' + '}';
+  }
 }

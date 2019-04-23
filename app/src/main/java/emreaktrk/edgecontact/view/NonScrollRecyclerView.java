@@ -6,36 +6,38 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-
 public final class NonScrollRecyclerView extends RecyclerView {
 
-    public NonScrollRecyclerView(Context context) {
-        super(context);
+  public NonScrollRecyclerView(Context context) {
+    super(context);
 
-        init();
-    }
+    init();
+  }
 
-    public NonScrollRecyclerView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+  public NonScrollRecyclerView(Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
 
-        init();
-    }
+    init();
+  }
 
-    public NonScrollRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+  public NonScrollRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
 
-        init();
-    }
+    init();
+  }
 
-    private void init() {
-        setLayoutManager(new LinearLayoutManager(getContext()) {
-            @Override public boolean canScrollHorizontally() {
-                return false;
-            }
+  private void init() {
+    setLayoutManager(
+        new LinearLayoutManager(getContext()) {
+          @Override
+          public boolean canScrollHorizontally() {
+            return false;
+          }
 
-            @Override public boolean canScrollVertically() {
-                return false;
-            }
+          @Override
+          public boolean canScrollVertically() {
+            return false;
+          }
         });
-    }
+  }
 }

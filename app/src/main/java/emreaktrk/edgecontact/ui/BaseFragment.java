@@ -8,34 +8,35 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import emreaktrk.edgecontact.logger.Logger;
-
 
 public abstract class BaseFragment extends Fragment {
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        Logger.d(getName() + " created");
-    }
+    Logger.d(getName() + " created");
+  }
 
-    @LayoutRes
-    protected abstract int getLayoutResId();
+  @LayoutRes
+  protected abstract int getLayoutResId();
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View cell = inflater.inflate(getLayoutResId(), container, false);
-        onViewInflated(cell);
+  @Nullable
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    View cell = inflater.inflate(getLayoutResId(), container, false);
+    onViewInflated(cell);
 
-        return cell;
-    }
+    return cell;
+  }
 
-    protected abstract void onViewInflated(View view);
+  protected abstract void onViewInflated(View view);
 
-    protected String getName() {
-        return getClass().getSimpleName();
-    }
+  protected String getName() {
+    return getClass().getSimpleName();
+  }
 }

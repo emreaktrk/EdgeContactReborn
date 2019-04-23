@@ -1,5 +1,3 @@
 package emreaktrk.edgecontact.agent.event;
 
-
-interface IEvent {
-}
+interface IEvent {}
