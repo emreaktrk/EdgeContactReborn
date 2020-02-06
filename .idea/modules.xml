@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Android-EdgeContactReborn.iml" filepath="$PROJECT_DIR$/.idea/modules/Android-EdgeContactReborn.iml" group="EdgeContactReborn" />
       <module fileurl="file://$PROJECT_DIR$/EdgeContactReborn.iml" filepath="$PROJECT_DIR$/EdgeContactReborn.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EdgeContactReborn.iml" filepath="$PROJECT_DIR$/EdgeContactReborn.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/EdgeContactReborn-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/EdgeContactReborn-app.iml" group="EdgeContactReborn/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
