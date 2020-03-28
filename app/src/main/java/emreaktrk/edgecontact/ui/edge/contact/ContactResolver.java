@@ -23,8 +23,6 @@ final class ContactResolver {
   private Context mContext;
   private Uri mUri;
   private int mPosition;
-  private int Selam;
-  private int dunya;
 
   public static ContactResolver from(Context context) {
     ContactResolver builder = new ContactResolver();
